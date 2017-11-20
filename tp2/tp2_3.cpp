@@ -12,29 +12,30 @@ using namespace std;
 
 void display(vector <int> data)
 {
-  int total = data.size();
-  for(int i = 0; i < total; i++)
+  cout << endl;
+  
+  int i, total = data.size();
+  for(i = 0; i < total; i++)
   {
-    cout << "\n" << data[i];
-  }  
+    cout << data[i] << endl;
+  }
+
+  cout << endl;
 }
 
-vector <int> sort(vector <int>& data)
+void sort(vector <int>& data)
 {
   int total = data.size();
 
   int i, j , temp;
-  for (i = 0; i < total-1; i++)  
-  {
-    for(int j = 0; j < total-i-1; j++)
-      {
-	if (data[j] > data[j+1])
-	  {
-	    temp = data[j];
-	    data[j] = data[j+1];
-	    data[j+1] = data[temp];
-	  }
+  for (i = 0; i < total-1; i++){
+    for (j = 0; j < total-i-1; j++){      
+      if (data[j] > data[j+1]){
+	temp = data[j];
+	data[j] = data[j+1];
+	data[j+1] = temp;
       }
+    }
   }
 }
 
@@ -43,7 +44,7 @@ int main(int argc, char* argv[])
   vector <int> data;
   int typed = 0;
   
-  cout << "Type 10 integers:"  << endl;
+  cout << "Type 10 integers:" << endl;
   for(int i = 0; i < 10; i++)
   {
     cin >> typed;

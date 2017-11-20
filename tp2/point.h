@@ -1,9 +1,7 @@
 /**
  * André ALMEIDA ROCHA
  * 5MM30: Résolution des EDP par MF.
- * TP2: Local copies and references, classes, STL.
- * Exercises: 2
- * Class definition
+ * Class point (R2).
  */
 
 #ifndef point_h

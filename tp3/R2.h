@@ -23,4 +23,7 @@ public:
   double get_y();
 };
 
+double distance_euclidean(R2 point1, R2 point2);
+double comparation(R2 point1, R2 point2);
+
 #endif

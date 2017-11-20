@@ -1,36 +1,45 @@
 CXX=g++
-CPPFLAGS= -c
+CXXFLAGS=-c -Wall
 
-SOURCES=R2.cpp tp3_1_1.cpp tp3_1_2.cpp tp3_1_3.cpp tp3_2_1.cpp tp3_2_2.cpp tp3_2_3.cpp
-OBJECTS=$(SOURCES:%.cpp=%.o)
+SOURCES=matR2.cpp R2.cpp tp3_1_1.cpp tp3_1_3.cpp #tp3_2_1.cpp tp3_2_2.cpp tp3_2_3.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+
 
 EXECUTABLE=tp3
 
-#all: $(EXECUTABLE)
-#    $(CXX) $^ -o $@ $(CXXFLAGS) $(LDFLAGS) $(LDLIBS)
+all: $(EXECUTABLE)
 
-#$(EXECUTABLE): $(OBJECTS)   
+$(EXECUTABLE): $(OBJECTS)
+	$(CXX) $(OBJECTS) -o $@
 
-#R2.o tp3_1_1.o: R2.cpp tp3_1_1.cpp
-#    $(CXX) $(CXXFLAGS) R2.cpp tp3_1_1.cpp
+$(OBJECTS): $(SOURCES)
+	$(CXX) $(CXXFLAGS) $^
 
-#1.1: R2.o tp3_1_1.o
-#    $(CXX) R2.o tp3_1_1.o -o $(EXECUTABLE)
-    
-#1.2: 
-    
+1.1: R2.o tp3_1_1.o
+	$(CXX) $^ -o $(EXECUTABLE)
+
+1.2: matR2.o tp3_1_2.o
+	$(CXX) $^ -o $(EXECUTABLE)
 
 #1.3: 
-    
+
 
 #2.1: 
-    
+
 
 #2.2:
-    
+
 
 #2.3:
 #	$(CXX) $^ -o $@ $(CXXFLAGS) $(LDFLAGS) $(LDLIBS) 
 
+test: test_matrix.cpp
+	$(CXX) $^ -o matrix
+	./matrix
+
+run:
+	./$(EXECUTABLE)
+
+
 clean:
-		rm -rf $(OBJECTS) *~
+	rm -rf $(OBJECTS) $(EXECUTABLE) *~

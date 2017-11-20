@@ -4,6 +4,7 @@
  * Explicit definition of the class R2 (point).
  */
 
+#include <cmath>
 #include "R2.h"
 
 R2::R2()
@@ -42,4 +43,26 @@ double R2::get_x()
 double R2::get_y()
 {
   return y;
+}
+
+/**
+ * Euclidean distance between two elements of R2.
+ */
+double distance_euclidean(R2 point1, R2 point2)
+{
+  double delta_x = point1.get_x() - point2.get_x();
+  double delta_y = point1.get_y() - point2.get_y();
+
+  return sqrt(delta_x*delta_x + delta_y*delta_y);
+}
+
+/**
+ * Comparation between two elements of R2.
+ */
+double comparation(R2 point1, R2 point2)
+{
+  double equal_x = (point1.get_x() == point2.get_x());
+  double equal_y = (point1.get_y() == point2.get_y());
+
+  return equal_x && equal_y;
 }
