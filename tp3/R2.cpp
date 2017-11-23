@@ -7,42 +7,79 @@
 #include <cmath>
 #include "R2.h"
 
-R2::R2()
-{
-  x = 0;
-  y = 0;
+void R2::init(){
+  data = std::vector<double>(2, 0.0);
 }
 
-R2::R2(const R2& p)
-{
-  x = p.x;
-  y = p.y;
+R2::R2(){
+  init();
 }
 
-R2::R2(double a, double b)
-{
-  x = a;
-  y = b;
+R2::R2(const R2 &point){
+  init();
+  data[0] = point.data[0];
+  data[1] = point.data[1];
 }
+
+R2::R2(double value1, double value2){
+  init();
+  data[0] = value1;
+  data[1] = value2;
+}
+
+void R2::set_x(double value1){
+  data[0] = value1;
+}
+
+void R2::set_y(double value2){
+  data[1] = value2;
+}
+
+double R2::get_x() const{
+  return data[0];
+}
+
+double R2::get_y() const{
+  return data[1];
+}
+
+R2& R2::operator= (const R2& point){
+  if (this != &point){
+    data[0] = point.data[0];
+    data[1] = point.data[1];
+  }
   
-void R2::set_x(double a)
-{
-  x = a;
+  return *this;
 }
 
-void R2::set_y(double b)
-{
-  y = b;
+std::ostream& operator<< (std::ostream& output, const R2& point){
+  output << "(" << point.get_x() << ", " << point.get_y() << ")";
+
+  return output;
 }
 
-double R2::get_x()
-{
-  return x;
+R2 R2::operator+ (const R2& point){
+  R2 new_point(data[0] + point.get_x(), data[1] + point.get_y());
+  return new_point;
 }
 
-double R2::get_y()
-{
-  return y;
+R2 R2::operator* (double real){
+  R2 new_point(data[0] * real, data[1] * real);
+  return new_point;
+}
+
+R2 operator* (double real, const R2& point){
+  R2 new_point(real * point.get_x(), real * point.get_y());
+  return new_point;
+}
+
+double R2::operator, (const R2& point){
+  double result = data[0] * point.get_x() + data[1] * point.get_y();
+  return result;
+}
+
+double& R2::operator[] (int index){
+  return data[index];
 }
 
 /**
@@ -59,10 +96,10 @@ double distance_euclidean(R2 point1, R2 point2)
 /**
  * Comparation between two elements of R2.
  */
-double comparation(R2 point1, R2 point2)
+bool comparation(R2 point1, R2 point2)
 {
-  double equal_x = (point1.get_x() == point2.get_x());
-  double equal_y = (point1.get_y() == point2.get_y());
+  bool equals_x = (point1.get_x() == point2.get_x());
+  bool equals_y = (point1.get_y() == point2.get_y());
 
-  return equal_x && equal_y;
+  return equals_x && equals_y;
 }
