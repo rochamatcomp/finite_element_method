@@ -76,12 +76,12 @@ int main(int argc, char* argv[])
     cout << "Impossible create the mesh with non positive size." << endl;
     exit(1);
   }
-  /*
+  
   if(argc == 3)
   {
     filename = string(argv[2]) + ".msh";
   }
-  */
+  
   file.open(filename.c_str());
   if(file.is_open())
   {
