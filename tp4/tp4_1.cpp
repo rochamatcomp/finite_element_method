@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
   }
   else
   {
-    cout << "Impossible open the file: " << filename << "" << endl;
+    cout << "Impossible open the file: " << filename << endl;
     exit(1);
   }
   

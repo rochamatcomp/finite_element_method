@@ -17,6 +17,9 @@ $(OBJECTS): $(SOURCES)
 1.1: tp4_1.o
 	$(CXX) $^ -o $(EXECUTABLE)
 
+R1: R1.cpp
+	$(CXX) $(CXXFLAGS) $^
+
 run: ./$(EXECUTABLE)
 	./$(EXECUTABLE)	${ARGS}
 
