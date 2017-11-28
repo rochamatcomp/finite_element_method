@@ -17,9 +17,8 @@ $(OBJECTS): $(SOURCES)
 1.1: tp4_1.o
 	$(CXX) $^ -o $(EXECUTABLE)
 
-run:
-	echo  $(MAKECMDGOALS)
-	./$(EXECUTABLE) $(MAKECMDGOALS)
+run: ./$(EXECUTABLE)
+	./$(EXECUTABLE)	${ARGS}
 
 clean:
 	rm -rf $(OBJECTS) $(EXECUTABLE) *~
