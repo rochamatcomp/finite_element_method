@@ -1,33 +1,17 @@
-CXX=g++
-CXXFLAGS=-c -Wall
+PROGS = Lapl-EF1d
 
-SOURCES=mesh.cpp R1.cpp EF1d-base.cpp
-OBJECTS=$(SOURCES:.cpp=.o)
-
-EXECUTABLE=tp4
-
-all: $(EXECUTABLE)
-
-$(EXECUTABLE): $(OBJECTS)
-	$(CXX) $(OBJECTS) -o $@
-
-#$(OBJECTS): $(SOURCES)
-#	$(CXX) $(CXXFLAGS) $^
-
-1.1: mesh.o
-	$(CXX) $^ -o $(EXECUTABLE)
-
-R1.o: R1.cpp
-	$(CXX) $(CXXFLAGS) $^
-
-#EF1d-base.o: R1.o EF1d-base.cpp
-#	$(CXX) $(CXXFLAGS) $^
-
-test: test.cpp
-	$(CXX) $^ -o $@
-
-run: ./$(EXECUTABLE)
-	./$(EXECUTABLE)	${ARGS}
-
+all:$(PROGS)
+	
+Lapl-EF1d:Lapl-EF1d.o EF1d-base.o GC.o 
+	$(CXX) $^ -o $@ $(CXXFLAGS) $(LDFLAGS) $(LIBS) 
+#	$(CXX) Lapl-EF1d.o EF1d-base.o -o Lapl-EF1d 
 clean:
-	rm -rf $(OBJECTS) $(EXECUTABLE) *~
+	-rm -r $(PROGS) *.o *.dDSYM toto.gp 
+
+run:
+	./$(PROGS) mesh4.msh
+
+# les dependances 
+Lapl-EF1d.o: EF1d-base.hpp R1.hpp GC.h 
+EF1d-base.o: EF1d-base.hpp R1.hpp GC.h
+GC.o:GC.h		

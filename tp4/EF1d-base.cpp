@@ -1,41 +1,42 @@
 #include "EF1d-base.hpp"
 #include <fstream>
 
-Mesh1d::Mesh1d(const char* filename)
+Mesh1d::Mesh1d(const char * filename)
 {
-  std::ifstream file(filename); 
-  assert(file);
+  std::ifstream  f(filename); 
+  assert(f);
   
   int unused;
-  int vertex_number[2];
-  int vertex = 0;
-  int edge = 0;
-  double mesure = 0;
+  int total = 2; // total of vertices in simplex.
+  int I[total];
+  double mes =0;
   
-  file >> vertexes >> edges >> unused;
-  assert(file.good());
+  f >> nv >> nt >> unused ;
+  assert(f.good());
   
-  set_edge = new Simplex[edges];
-  set_vertex = new Vertex[vertexes];
-  assert(set_edge && set_vertex);
+  t = new Simplex[nt];
+  v = new Vertex[nv];
+  assert( t && v); 
   
-  for(vertex = 0; vertex < vertexes; vertex++)
+  for(int i=0;i<nv;++i)
   { 
-    file >> set_vertex[vertex]; 
-    assert(file.good());
+    f >> v[i];
+    assert(f.good());
   }
 
-  for(edge = 0; edge < edges; edge++)
+  for(int k=0;k<nt;++k)
   { 
-      for(vertex = 0; vertex < 2; vertex++)
-      {
-	file >> vertex_number[vertex];
-      }
-      
-      assert(file.good());
-      set_edge[edge].build(set_vertex, vertex_number, -1);
-      mesure += set_edge[edge].mesure; 
-  }
+    for(int i=0; i < total; ++i)
+    {
+      f >> I[i];
+    }
+    
+    f >> unused;
 
-  std::cout<< " End read " << vertexes << " " << edges << " mesure =" << mesure << std::endl; 
+    assert(f.good());
+    t[k].build(v, I, 0);
+    mes += t[k].mes;
+  }
+  
+  std::cout<< " End read " << nv << " " << nt << " mes =" << mes << std::endl; 
 }

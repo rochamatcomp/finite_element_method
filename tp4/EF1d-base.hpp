@@ -1,166 +1,92 @@
 #include "R1.hpp"
-#include <cmath> 
 #include <cassert>
 
-class Label
-{
+class Label {
 public:
-  int label; 
-
-  int  OnGamma() const
-  {
-    return label;
-  }
-  
-  Label(int lab = 0) : label(lab) {} 
+  int lab; 
+  int  OnGamma() const { return lab;}
+  Label(int l=0) : lab(l) {} 
 };
 
-class Vertex: public R1, public Label
+class Vertex :public R1, public  Label
 {
-public:
+ public:
   Vertex() {}   
 };
 
-inline std::ostream& operator << (std::ostream& file, const  Vertex& point)
-{
-  return  file << point.data << ' ' << point.label << ' ';
-}
+inline std::ostream& operator <<(std::ostream& f, const  Vertex & P )
+{ return  f << P.x << ' ' << P.lab << ' ' ;}
+inline  std::istream& operator >>(std::istream& f,  Vertex & P)
+{ return f >>  P.x >> P.lab ;  }
 
-inline  std::istream& operator >>(std::istream& file,  Vertex& point)
-{
-  return file >> point.data >> point.label;
-}
-
-/**
- * Generalization of the notion of a triangle or tetrahedron to arbitrary dimensions. 1-simplex is a line segment.
- */
-class Simplex
-{
+class Simplex {
 private:
-
-  double calculate_measure()
+  double calculate_mesure()
   {
-    // mesure(P0, P1) = -1 * P0P1
-    R1 point = R1(*data[0], *data[1]);
-    return point[0];
+    return det(*v[0], *v[1]);
   }
   
-public:
-  static const int dimension = 1;
-  static const int vertexes = 2;
-  Vertex* data[vertexes]; 
-  double mesure = 0.0;
+public: 
+  static const int nbv = 2; 
+  Vertex * v[nbv]; 
+  double mes;
+  Simplex(){ (v[0]=(v[1]=0));}
 
-  Simplex()
+  // I array of vertex number
+  void build(Vertex *v0, int * I, int offset=0)
   {
-    data[0] = 0;
-    data[1] = 0;
-  }
-
-  /**
-   * Building the simplex.
-   * @initial Initial vertex.
-   * @param vertex_number Array of vertex number.
-   * @offset Offset value to vertex data.
-   */
-  void build(Vertex* initial, int* vertex_number, int offset = 0)
-  {
-
-    for(int vertex = 0; vertex < vertexes; vertex++)
+    for(int i=0; i < nbv; ++i)
     {
-      data[vertex] = initial + vertex_number[vertex] + offset;
+      v[i] =  v0 + I[i] + offset;
     }
     
-    mesure = calculate_measure(); 
-    assert(mesure > 0);
+    mes = calculate_mesure();
+    //std::cout << *v[0] << ", " << *v[1] << ": " << mes << std::endl;
+    assert(mes > 0) ;
   }
   
-  void gradient_lambda_kroneker(R1* point) const
+  void GradLambdaK(R1 *G) const
   {
-    point[0] = R1(*data[0]).perp() / mesure;
+    double K = mes; 
+    G[0] = R1(*v[0],*v[1])/K;
   }
   
-  Vertex& operator[](int vertex)
+  Vertex & operator[](int i)
   {
-    assert(vertex >= 0 && vertex < vertexes);
-    return *(data[vertex]);
+    assert(i>=0 && i < nbv);
+    return *(v[i]);
   }
   
-  const Vertex& operator[](int vertex) const
+  const Vertex & operator[](int i) const
   {
-    assert(vertex >= 0 && vertex < vertexes);
-    return *(data[vertex]);
+    assert(i>=0 && i < nbv);
+    return *(v[i]);
   }
+
 };  
 
 class Mesh1d 
 {
 public:
-  int vertexes = 0;
-  int edges = 0; 
-  Vertex* set_vertex;
-  Simplex* set_edge;
-  
-  Mesh1d(const char* filename); 
-  
-  // destuctor => careful with copie operator
-  ~Mesh1d()
-  {
-    delete [] set_vertex;
-    delete [] set_edge;
-  }  
-
+  int nv,nt; 
+  Vertex * v; 
+  Simplex *t;
+  Mesh1d(const char *  filename); 
+  ~Mesh1d() { delete [] v; delete [] t; }
+  // destuctor => careful with copie operator  
   // no copy operator
-
   // chech index number
-  int CheckVertexes(int vertex) const
-  {
-    assert(vertex >= 0 && vertex < vertexes);
-    return vertex;
-  }
- 
-  int CheckEdges(int edge) const
-  {
-    assert(edge >= 0 && edge < edges);
-    return edge;
-  } 
-
-  int operator()(const Vertex& set_vertex) const
-  {
-    return CheckVertexes(&set_vertex - this->set_vertex);
-  }
-
-  int operator()(const  Simplex& set_edge) const
-  {
-    return CheckEdges(&set_edge - this->set_edge);
-  }
-  
-  int operator()(const Vertex* set_vertex) const
-  {
-    return CheckVertexes(set_vertex - this->set_vertex);
-  }  // (1)
-  
-  int operator()(const  Simplex* set_edge) const
-  {
-    return CheckEdges(set_edge - this->set_edge);
-  }
-
-  Simplex& operator[](int edge)
-  {
-    return set_edge[CheckEdges(edge)]; 
-  }
-
-  const Simplex& operator[](int edge) const
-  {
-    return set_edge[CheckEdges(edge)];
-  }
-
-  int operator()(int edge, int vertex) const
-  {
-    return operator()(set_edge[edge].set_vertex[vertex]);
-  }// call (1)
+  int CheckV(int i) const { assert( i>=0 && i < nv); return i; } 
+  int CheckT(int i) const { assert( i>=0 && i < nt); return i; } 
+  int operator()(const Vertex & vv) const { return CheckV(&vv-v);}
+  int operator()(const  Simplex & tt) const  { return CheckT(&tt-t);}
+  int operator()(const Vertex * vv)const  { return CheckV(vv-v);}  // (1)
+  int operator()(const  Simplex * tt) const { return CheckT(tt-t);}
+  Simplex & operator[](int k) { return t[CheckT(k)]; }
+  const Simplex & operator[](int k) const { return t[CheckT(k)]; }
+  int  operator()(int k,int i) const { return  operator()(t[k].v[i]); }// call (1)
 
 private:
-  Mesh1d(const Mesh1d&);
-  Mesh1d& operator=(const Mesh1d&);
+  Mesh1d(const Mesh1d &);
+  Mesh1d & operator=(const Mesh1d &); 
 };
