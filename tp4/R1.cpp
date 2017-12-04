@@ -29,6 +29,12 @@ R1::R1(double value1)
   data = value1;
 }
 
+R1::R1(const R1& point1, const R1& point2)
+{
+  init();
+  data = point2[0] - point1[0];
+}
+
 R1& R1::operator= (const R1& point)
 {
   if (this != &point)

@@ -36,7 +36,17 @@ inline  std::istream& operator >>(std::istream& file,  Vertex& point)
  */
 class Simplex
 {
-public: 
+private:
+
+  double calculate_measure()
+  {
+    // mesure(P0, P1) = -1 * P0P1
+    R1 point = R1(*data[0], *data[1]);
+    return point[0];
+  }
+  
+public:
+  static const int dimension = 1;
   static const int vertexes = 2;
   Vertex* data[vertexes]; 
   double mesure = 0.0;
@@ -59,16 +69,15 @@ public:
     for(int vertex = 0; vertex < vertexes; vertex++)
     {
       data[vertex] = initial + vertex_number[vertex] + offset;
-    } 
+    }
     
-    mesure = (*data[0] - *data[1]); 
+    mesure = calculate_measure(); 
     assert(mesure > 0);
   }
   
-  void GradLambdaK(R1* G) const
+  void gradient_lambda_kroneker(R1* point) const
   {
-    double K2 = mesure * 2; 
-    G[0] = R1(*data[0]).perp() / K2;
+    point[0] = R1(*data[0]).perp() / mesure;
   }
   
   Vertex& operator[](int vertex)

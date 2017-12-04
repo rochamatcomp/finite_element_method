@@ -20,6 +20,7 @@ public:
   R1();
   R1(const R1&);
   R1(double);
+  R1(const R1& point1, const R1& point2);
   R1& operator= (const R1&);
   R1 operator+ (const R1&) const;
   R1 operator- (const R1&) const;
