@@ -20,23 +20,13 @@ R1::R1()
 R1::R1(const R1 &point)
 {
   init();
-  data = point.data;
+  data = point[0];
 }
 
 R1::R1(double value1)
 {
   init();
   data = value1;
-}
-
-void R1::set_x(double value1)
-{
-  data = value1;
-}
-
-double R1::get_x() const
-{
-  return data;
 }
 
 R1& R1::operator= (const R1& point)
@@ -50,58 +40,78 @@ R1& R1::operator= (const R1& point)
 
 std::ostream& operator<< (std::ostream& output, const R1& point)
 {
-  output << "(" << point.get_x() << ")";
+  output << "(" << point[0] << ")";
   return output;
 }
 
 R1 R1::operator+ (const R1& point) const
 {
-  R1 new_point(data + point.get_x());
-  return new_point;
+  return R1(data + point[0]);
 }
 
 R1 R1::operator- (const R1& point) const
 {
-  R1 new_point(data - point.get_x());
-  return new_point;
+  return R1(data - point[0]);
 }
 
 R1 R1::operator* (double real) const
 {
-  R1 new_point(data * real);
-  return new_point;
+  return R1(data * real);
 }
 
 R1 operator* (double real, const R1& point)
 {
-  R1 new_point(real * point.get_x());
-  return new_point;
+  return R1(real * point[0]);
 }
 
 R1 R1::operator/ (double real) const
 {
-  R1 new_point(data / real);
-  return new_point;
+  return R1(data / real);
 }
 
 R1 operator/ (double real, const R1& point)
 {
-  R1 new_point(real / point.get_x());
-  return new_point;
+  return R1(real / point[0]);
 }
 
 double R1::operator, (const R1& point)
 {
-  double result = data * point.get_x();
-  return result;
+  return data * point[0];
 }
 
-double&  R1::operator[](int index)
+R1 R1::operator-() const
 {
+  return R1(-data);
+} 
+
+const R1& R1::operator+() const
+{
+  return *this;
+}
+
+double& R1::operator[](int index)
+{
+  
   return (&data)[index];
 }
 
 const double& R1::operator[](int index) const
 {
   return (&data)[index];
+}
+
+inline double determinant(const R1& point)
+{
+  
+  return point[0];
+}
+
+R1 R1::perp() const
+{
+  return R1(-data);
+}
+
+inline R1 perp(const R1& point)
+{
+  return R1(-point[0]);
 }

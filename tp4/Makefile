@@ -1,7 +1,7 @@
 CXX=g++
 CXXFLAGS=-c -Wall
 
-SOURCES=tp4_1.cpp
+SOURCES=mesh.cpp R1.cpp EF1d-base.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 
 EXECUTABLE=tp4
@@ -11,14 +11,20 @@ all: $(EXECUTABLE)
 $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(OBJECTS) -o $@
 
-$(OBJECTS): $(SOURCES)
-	$(CXX) $(CXXFLAGS) $^
+#$(OBJECTS): $(SOURCES)
+#	$(CXX) $(CXXFLAGS) $^
 
-1.1: tp4_1.o
+1.1: mesh.o
 	$(CXX) $^ -o $(EXECUTABLE)
 
-R1: R1.cpp
+R1.o: R1.cpp
 	$(CXX) $(CXXFLAGS) $^
+
+#EF1d-base.o: R1.o EF1d-base.cpp
+#	$(CXX) $(CXXFLAGS) $^
+
+test: test.cpp
+	$(CXX) $^ -o $@
 
 run: ./$(EXECUTABLE)
 	./$(EXECUTABLE)	${ARGS}

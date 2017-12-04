@@ -12,16 +12,14 @@
 class R1
 {
 private:
-  double data;
   void init();
   
 public:
   static const int dimension = 1;
+  double data;
   R1();
   R1(const R1&);
   R1(double);
-  void set_x(double);
-  double get_x() const;
   R1& operator= (const R1&);
   R1 operator+ (const R1&) const;
   R1 operator- (const R1&) const;
@@ -30,9 +28,13 @@ public:
   double operator, (const R1&);
   double& operator[](int);
   const double& operator[](int) const;
+  R1 operator-() const;
+  const R1& operator+() const;  
+  R1 perp() const;
   friend std::ostream& operator<< (std::ostream& output, const R1& point);
   friend R1 operator*(double, const R1&);
   friend R1 operator/(double, const R1&);
+  friend inline R1 perp(const R1&);
 };
 
 #endif
