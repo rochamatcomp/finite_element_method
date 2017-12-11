@@ -1,0 +1,25 @@
+CXX=g++
+CXXFLAGS=-c -Wall
+
+SOURCES=tp5_1.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+
+EXECUTABLE=tp5
+
+all: $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CXX) $(OBJECTS) -o $@
+
+$(OBJECTS): $(SOURCES)
+	$(CXX) $(CXXFLAGS) $^
+
+1.1: tp4_5.o
+	$(CXX) $^ -o $(EXECUTABLE)
+
+run:
+	echo  $(MAKECMDGOALS)
+	./$(EXECUTABLE) $(MAKECMDGOALS)
+
+clean:
+	rm -rf $(OBJECTS) $(EXECUTABLE) *~

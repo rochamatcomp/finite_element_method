@@ -1,0 +1,24 @@
+/**
+ * André ALMEIDA ROCHA
+ * 5MM30: Résolution des EDP par MF.
+ * TP5: FEM in 2-Dimension.
+ * Question 1: Solve.
+ */
+
+// Reads the mesh file.
+mesh Th("mesh.msh");
+
+// Defines Vh as the space of Lagrange P1 elements on the mesh Th.
+fespace Vh(Th,P1);
+
+Vh u,v;
+solve laplace(u,v,solver=CG) =
+      int2d(Th)(  dx(u)*dx(v)+ dy(u)*dy(v)     )
+      -  int2d(Th) ( 1*v)
+      + on(2,u=2) ; // int on γ2
+
+      plot(u,fill=1,wait=1,value=0,ps="april-fish.eps") ;
+
+
+g(x.y) = ikx * exp(ikx);
+Vh fh = g(x.y);

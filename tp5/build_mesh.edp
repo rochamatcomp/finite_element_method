@@ -1,0 +1,10 @@
+/**
+ * André ALMEIDA ROCHA
+ * 5MM30: Résolution des EDP par MF.
+ * TP5: FEM in 2-Dimension.
+ * Question 0: creates the mesh file.
+ */
+border C(t=0,2*pi) { x=cos(t); y=sin(t); }
+mesh Th = buildmesh(C(10));
+plot(Th);
+savemesh(Th, "mesh_sample.msh");
