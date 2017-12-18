@@ -21,10 +21,7 @@ public:
   void MatMul(double *x,double *ax);
 };
 
-/**
- * Transform the matrix to matrix-vector multiplication.  
- */
-void MatLap::MatMul(double *x, double *ax, bool dirichlet = false)
+void MatLap::MatMul(double *x,double *ax)
 {
   int d = 2;
   double coefm = alpha/(d+1)/(d+2) ;
@@ -47,8 +44,8 @@ void MatLap::MatMul(double *x, double *ax, bool dirichlet = false)
     K.GradLambdaK(Gw);
 
     
-    for(int ip=0; ip < 3; ++ip)
-      for(int jp=0; jp < 3; ++jp)
+    for(int ip=0; ip<3; ++ip)
+      for(int jp=0; jp<3; ++jp)
 	Ak[ip][jp] = coefmk*(1 + (ip==jp)) + (Gw[ip],Gw[jp])*betak;
 	
     for(int ip=0; ip<3; ++ip)
@@ -116,8 +113,8 @@ int main(int argc, const char **argv)
     
   int n = Th.nv;
   MatVirt Id = BuildMatId(n);
-  MatVirt A=BuildMatVirt(n,n,new MatLap(Th, -zeta, 1),PMatMulLap);
-  MatVirt M=BuildMatVirt(n,n,new MatLap(Th, 1, 0),PMatMulLap);
+  MatVirt A=BuildMatVirt(n,n,new MatLap(Th, -zeta,1),PMatMulLap);
+  MatVirt M=BuildMatVirt(n,n,new MatLap(Th,1,0),PMatMulLap);
   double *u = new double[n];
   double *fh = new double[n];
   double *b = new double[n];
