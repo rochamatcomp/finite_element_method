@@ -10,4 +10,7 @@ clean:
 # les dependances 
 Lapl-EF2d.o: EF2d-base.hpp R2.hpp GC.h 
 EF2d-base.o: EF2d-base.hpp R2.hpp GC.h
-GC.o:GC.h		
+GC.o:GC.h
+
+run: $(PROGS)
+	./$(PROGS)

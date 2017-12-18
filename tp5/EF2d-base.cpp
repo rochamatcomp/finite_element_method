@@ -18,6 +18,8 @@ Mesh2d::Mesh2d(const char * filename)
       assert( f.good());
     }
 
+  /* build the edges */
+  
   for(int k=0;k<nt;++k)
     { 
       for(int i=0;i< 4; ++i)

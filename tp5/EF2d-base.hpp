@@ -42,14 +42,47 @@ public:
   
   Vertex & operator[](int i) { assert(i>=0 && i < nbv); return *(v[i]); }
   const Vertex & operator[](int i) const { assert(i>=0 && i < nbv); return *(v[i]); }
+};
+
+class Edge {
+public: 
+  static const int nbv = 2; 
+  Vertex * v[nbv]; 
+  double mes;
+  
+  Edge(){ (v[0]=(v[1]=0));}
+
+  /**
+   * I array of vertex number  
+   */
+  void build(Vertex *v0, int * I,int offset=0)
+  {
+    for(int i=0; i < nbv; ++i) 
+      v[i] =  v0 + I[i]+offset; 
+    mes = det(*v[0], *v[1], *v[2]) * 0.5; 
+    assert(mes>0) ;
+  }
+  
+  void GradLambdaK(R2 *G) const
+  {
+    double K2 = mes*2; 
+    G[0] = R2(*v[1],*v[2]).perp()/K2;
+    G[1] = R2(*v[2],*v[0]).perp()/K2;
+    G[2] = R2(*v[0],*v[1]).perp()/K2;
+  }
+  
+  Vertex & operator[](int i) { assert(i>=0 && i < nbv); return *(v[i]); }
+  const Vertex & operator[](int i) const { assert(i>=0 && i < nbv); return *(v[i]); }
 
 };  
+
 
 class Mesh2d 
 {
 public:
-  int nv,nt; 
-  Vertex * v; 
+  int nv, ne, nt;
+  Vertex * v;
+  Edge *edges;
   Simplex *t;
   Mesh2d(const char *  filename); 
   ~Mesh2d() { delete [] v; delete [] t; }
